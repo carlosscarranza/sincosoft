@@ -1,0 +1,58 @@
+<h1>Asignar Profesor</h1>
+
+<form class="form-horizontal" novalidate="" (ngSubmit)="save()" [formGroup]="formGroup">
+  <fieldset>
+
+    <div class="form-group" [ngClass]="{ 'has-error': (formGroup.get('id_materia').touched || formGroup.get('id_materia').dirty) && !formGroup.get('id_materia').valid }">
+      <label class="col-md-2 control-label" for="id_materiaId">Materia</label>
+      <div class="col-md-8">
+
+        <select class="form-control" id="id_materiaId" required formControlName="id_materia">
+          <option [ngValue]="null">Seleccione</option>
+          <option *ngFor="let ma of materia" value="{{ma.id}}">
+            {{ma.nombre}}
+          </option>
+        </select>
+
+        <span class="help-block" *ngIf="(formGroup.get('id_materia').touched || formGroup.get('id_materia').dirty) && !formGroup.get('id_materia').valid">
+          <span *ngIf="formGroup.get('id_materia').errors.required">
+            El campo materia es requerido
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group" [ngClass]="{ 'has-error': (formGroup.get('id_profesor').touched || formGroup.get('id_profesor').dirty) && !formGroup.get('id_profesor').valid }">
+      <label class="col-md-2 control-label" for="id_profesorId">Profesor</label>
+      <div class="col-md-8">
+
+        <select class="form-control" id="id_profesorId" required formControlName="id_profesor">
+          <option [ngValue]="null">Seleccione</option>
+          <option *ngFor="let pro of profesor" value="{{pro.id}}">
+            {{pro.nombre}}
+          </option>
+        </select>
+
+        <span class="help-block" *ngIf="(formGroup.get('id_profesor').touched || formGroup.get('id_profesor').dirty) && !formGroup.get('id_profesor').valid">
+          <span *ngIf="formGroup.get('id_profesor').errors.required">
+            El campo profesor es requerido
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-4 col-md-offset-2">
+        <span>
+          <button class="btn btn-primary" type="submit" [disabled]="!formGroup.valid">
+            Guardar
+          </button>
+          <button class="btn" [routerLink]='["/registro"]'>
+            Cancelar
+          </button>
+        </span>
+      </div>
+    </div>
+
+  </fieldset>
+</form>

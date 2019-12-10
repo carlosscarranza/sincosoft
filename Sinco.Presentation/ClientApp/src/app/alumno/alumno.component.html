@@ -1,0 +1,64 @@
+
+<h1 *ngIf="!(editMode)">
+  Agregar Alumno
+</h1>
+
+<form class="form-horizontal" novalidate="" (ngSubmit)="save()" [formGroup]="formGroup">
+  <fieldset>
+
+    <div class="form-group" [ngClass]="{ 'has-error': (formGroup.get('nombre').touched || formGroup.get('nombre').dirty) && !formGroup.get('nombre').valid }">
+      <label class="col-md-2 control-label" for="nombreId">Nombre</label>
+
+      <div class="col-md-8">
+        <input class="form-control" id="nombreId" type="text" required formControlName="nombre" />
+        <span class="help-block" *ngIf="(formGroup.get('nombre').touched || formGroup.get('nombre').dirty) && !formGroup.get('nombre').valid">
+          <span *ngIf="formGroup.get('nombre').errors.required">
+            El campo nombre es requerido
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group" [ngClass]="{ 'has-error': (formGroup.get('semestre').touched || formGroup.get('semestre').dirty) && !formGroup.get('semestre').valid }">
+      <label class="col-md-2 control-label" for="semestreId">Semestre</label>
+
+      <div class="col-md-8">
+        <input class="form-control" id="semestreId" type="number" required formControlName="semestre" />
+        <span class="help-block" *ngIf="(formGroup.get('semestre').touched || formGroup.get('semestre').dirty) && !formGroup.get('semestre').valid">
+          <span *ngIf="formGroup.get('semestre').errors.required">
+            El campo semestre es requerido
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group" [ngClass]="{ 'has-error': (formGroup.get('carrera').touched || formGroup.get('carrera').dirty) && !formGroup.get('carrera').valid }">
+      <label class="col-md-2 control-label" for="carreraId">Carrera</label>
+
+      <div class="col-md-8">
+        <input class="form-control" id="carreraId" type="text" required formControlName="carrera" />
+        <span class="help-block" *ngIf="(formGroup.get('carrera').touched || formGroup.get('carrera').dirty) && !formGroup.get('carrera').valid">
+          <span *ngIf="formGroup.get('carrera').errors.required">
+            El campo carrera es requerido
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-4 col-md-offset-2">
+        <span>
+          <button class="btn btn-primary" type="submit" [disabled]="!formGroup.valid">
+            Guardar
+          </button>
+          <button class="btn" [routerLink]='["/registro"]' >
+            Cancelar
+          </button>
+        </span>
+      </div>
+    </div>
+
+  </fieldset>
+</form>
+
+

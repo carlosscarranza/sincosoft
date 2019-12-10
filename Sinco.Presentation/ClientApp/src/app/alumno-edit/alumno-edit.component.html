@@ -1,0 +1,20 @@
+<h1>Editar Alumno</h1>
+
+<form class="form-horizontal" novalidate="" >
+  <fieldset>
+    <div class="form-group">
+      <label class="col-md-2 control-label">Alumno</label>
+      <div class="col-md-8">
+        <select class="form-control" (change)="onOptionsSelected($event)">
+          <option value="0">Seleccione</option>
+          <option *ngFor="let al of alumnos" value="{{al.id}}">
+            {{al.nombre}}
+          </option>
+        </select>
+      </div>
+    </div>
+  </fieldset>
+</form>
+<br>
+
+<app-alumno [editMode]="true" [Alumno]="(alumno)"></app-alumno>

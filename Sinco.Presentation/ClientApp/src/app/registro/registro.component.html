@@ -1,0 +1,48 @@
+<h1>Reporte Notas</h1>
+
+<button [routerLink]='["/alumno"]' class="btn btn-primary" style="margin: 3px">Agregar Alumno</button>
+<button [routerLink]='["/materia"]' class="btn btn-primary" style="margin: 3px">Agregar Materia</button>
+<button [routerLink]='["/profesor"]' class="btn btn-primary" style="margin: 3px">Agregar Profesor</button>
+<button [routerLink]='["/alumno-edit"]' class="btn btn-info" style="margin: 3px">Actualizar Alumno</button>
+<button [routerLink]='["/profesor-delete"]' class="btn btn-danger" style="margin: 3px">Eliminar Profesor</button>
+
+<!-- Select -->
+<select class="btn btn-default" (change)="onOptionsSelected($event)">
+  <option value="0">Seleccione</option>
+  <option *ngFor="let al of alumno" value="{{al.id}}">
+    {{al.nombre}}
+  </option>
+</select><br>
+
+<br><b>
+  <p *ngIf="!(registro && registro.length)" align="center">No existen registros para mostrar</p>
+</b>
+
+<table class="table" *ngIf="registro && registro.length">
+  <thead>
+    <tr>
+      <th>Materia</th>
+      <th>Nota</th>
+      <th>Profesor</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let re of registro">
+      <td>{{re.materia}}</td>
+      <td>{{re.nota}}</td>
+      <td>{{re.profesor}}</td>
+      <td>
+        <button class="btn btn-default" (click)="openDialog($event, re.iD_REGISTRO)">Editar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+
+

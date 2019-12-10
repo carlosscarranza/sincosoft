@@ -1,0 +1,394 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SincoABRModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Alumno">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="50" />
+          <Property Name="Semestre" Type="int" />
+          <Property Name="Carrera" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Det_Registro_Alumno_Materia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Periodo" Type="int" Nullable="false" />
+          <Property Name="Nota" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Id_Re_Alumno_Materia" Type="int" />
+        </EntityType>
+        <EntityType Name="Materia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="50" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Profesor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="50" />
+          <Property Name="Profesion" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Registro_Alumno_Materia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Materia" Type="int" Nullable="false" />
+          <Property Name="Id_Alumno" Type="int" />
+        </EntityType>
+        <EntityType Name="Registro_Profesor_Materia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Profesor" Type="int" />
+          <Property Name="Id_Materia" Type="int" />
+        </EntityType>
+        <Association Name="FK_Det_Registro_Alumno_Materia_Registro_Alumno_Materia">
+          <End Role="Registro_Alumno_Materia" Type="Self.Registro_Alumno_Materia" Multiplicity="0..1" />
+          <End Role="Det_Registro_Alumno_Materia" Type="Self.Det_Registro_Alumno_Materia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Registro_Alumno_Materia">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Det_Registro_Alumno_Materia">
+              <PropertyRef Name="Id_Re_Alumno_Materia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registro_Alumno">
+          <End Role="Alumno" Type="Self.Alumno" Multiplicity="0..1" />
+          <End Role="Registro_Alumno_Materia" Type="Self.Registro_Alumno_Materia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumno">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registro_Alumno_Materia">
+              <PropertyRef Name="Id_Alumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registro_Materia">
+          <End Role="Materia" Type="Self.Materia" Multiplicity="1" />
+          <End Role="Registro_Alumno_Materia" Type="Self.Registro_Alumno_Materia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materia">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registro_Alumno_Materia">
+              <PropertyRef Name="Id_Materia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registro_Profesor_Materia_Materia">
+          <End Role="Materia" Type="Self.Materia" Multiplicity="0..1" />
+          <End Role="Registro_Profesor_Materia" Type="Self.Registro_Profesor_Materia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materia">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registro_Profesor_Materia">
+              <PropertyRef Name="Id_Materia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registro_Profesor_Materia_Profesor">
+          <End Role="Profesor" Type="Self.Profesor" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Registro_Profesor_Materia" Type="Self.Registro_Profesor_Materia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profesor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registro_Profesor_Materia">
+              <PropertyRef Name="Id_Profesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SincoABRModelStoreContainer">
+          <EntitySet Name="Alumno" EntityType="Self.Alumno" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Det_Registro_Alumno_Materia" EntityType="Self.Det_Registro_Alumno_Materia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Materia" EntityType="Self.Materia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Profesor" EntityType="Self.Profesor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Registro_Alumno_Materia" EntityType="Self.Registro_Alumno_Materia" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Registro_Profesor_Materia" EntityType="Self.Registro_Profesor_Materia" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Det_Registro_Alumno_Materia_Registro_Alumno_Materia" Association="Self.FK_Det_Registro_Alumno_Materia_Registro_Alumno_Materia">
+            <End Role="Registro_Alumno_Materia" EntitySet="Registro_Alumno_Materia" />
+            <End Role="Det_Registro_Alumno_Materia" EntitySet="Det_Registro_Alumno_Materia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registro_Alumno" Association="Self.FK_Registro_Alumno">
+            <End Role="Alumno" EntitySet="Alumno" />
+            <End Role="Registro_Alumno_Materia" EntitySet="Registro_Alumno_Materia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registro_Materia" Association="Self.FK_Registro_Materia">
+            <End Role="Materia" EntitySet="Materia" />
+            <End Role="Registro_Alumno_Materia" EntitySet="Registro_Alumno_Materia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registro_Profesor_Materia_Materia" Association="Self.FK_Registro_Profesor_Materia_Materia">
+            <End Role="Materia" EntitySet="Materia" />
+            <End Role="Registro_Profesor_Materia" EntitySet="Registro_Profesor_Materia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registro_Profesor_Materia_Profesor" Association="Self.FK_Registro_Profesor_Materia_Profesor">
+            <End Role="Profesor" EntitySet="Profesor" />
+            <End Role="Registro_Profesor_Materia" EntitySet="Registro_Profesor_Materia" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SincoABRModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="SincoABREntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Alumno" EntityType="SincoABRModel.Alumno" />
+          <EntitySet Name="Det_Registro_Alumno_Materia" EntityType="SincoABRModel.Det_Registro_Alumno_Materia" />
+          <EntitySet Name="Materia" EntityType="SincoABRModel.Materia" />
+          <EntitySet Name="Profesor" EntityType="SincoABRModel.Profesor" />
+          <EntitySet Name="Registro_Alumno_Materia" EntityType="SincoABRModel.Registro_Alumno_Materia" />
+          <EntitySet Name="Registro_Profesor_Materia" EntityType="SincoABRModel.Registro_Profesor_Materia" />
+          <AssociationSet Name="FK_Registro_Alumno" Association="SincoABRModel.FK_Registro_Alumno">
+            <End Role="Alumno" EntitySet="Alumno" />
+            <End Role="Registro_Alumno_Materia" EntitySet="Registro_Alumno_Materia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Det_Registro_Alumno_Materia_Registro_Alumno_Materia" Association="SincoABRModel.FK_Det_Registro_Alumno_Materia_Registro_Alumno_Materia">
+            <End Role="Registro_Alumno_Materia" EntitySet="Registro_Alumno_Materia" />
+            <End Role="Det_Registro_Alumno_Materia" EntitySet="Det_Registro_Alumno_Materia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registro_Materia" Association="SincoABRModel.FK_Registro_Materia">
+            <End Role="Materia" EntitySet="Materia" />
+            <End Role="Registro_Alumno_Materia" EntitySet="Registro_Alumno_Materia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registro_Profesor_Materia_Materia" Association="SincoABRModel.FK_Registro_Profesor_Materia_Materia">
+            <End Role="Materia" EntitySet="Materia" />
+            <End Role="Registro_Profesor_Materia" EntitySet="Registro_Profesor_Materia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Registro_Profesor_Materia_Profesor" Association="SincoABRModel.FK_Registro_Profesor_Materia_Profesor">
+            <End Role="Profesor" EntitySet="Profesor" />
+            <End Role="Registro_Profesor_Materia" EntitySet="Registro_Profesor_Materia" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Alumno">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Semestre" Type="Int32" />
+          <Property Name="Carrera" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Registro_Alumno_Materia" Relationship="SincoABRModel.FK_Registro_Alumno" FromRole="Alumno" ToRole="Registro_Alumno_Materia" />
+        </EntityType>
+        <EntityType Name="Det_Registro_Alumno_Materia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Periodo" Type="Int32" Nullable="false" />
+          <Property Name="Nota" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Id_Re_Alumno_Materia" Type="Int32" />
+          <NavigationProperty Name="Registro_Alumno_Materia" Relationship="SincoABRModel.FK_Det_Registro_Alumno_Materia_Registro_Alumno_Materia" FromRole="Det_Registro_Alumno_Materia" ToRole="Registro_Alumno_Materia" />
+        </EntityType>
+        <EntityType Name="Materia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Codigo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Registro_Alumno_Materia" Relationship="SincoABRModel.FK_Registro_Materia" FromRole="Materia" ToRole="Registro_Alumno_Materia" />
+          <NavigationProperty Name="Registro_Profesor_Materia" Relationship="SincoABRModel.FK_Registro_Profesor_Materia_Materia" FromRole="Materia" ToRole="Registro_Profesor_Materia" />
+        </EntityType>
+        <EntityType Name="Profesor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Profesion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Registro_Profesor_Materia" Relationship="SincoABRModel.FK_Registro_Profesor_Materia_Profesor" FromRole="Profesor" ToRole="Registro_Profesor_Materia" />
+        </EntityType>
+        <EntityType Name="Registro_Alumno_Materia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Materia" Type="Int32" Nullable="false" />
+          <Property Name="Id_Alumno" Type="Int32" />
+          <NavigationProperty Name="Alumno" Relationship="SincoABRModel.FK_Registro_Alumno" FromRole="Registro_Alumno_Materia" ToRole="Alumno" />
+          <NavigationProperty Name="Det_Registro_Alumno_Materia" Relationship="SincoABRModel.FK_Det_Registro_Alumno_Materia_Registro_Alumno_Materia" FromRole="Registro_Alumno_Materia" ToRole="Det_Registro_Alumno_Materia" />
+          <NavigationProperty Name="Materia" Relationship="SincoABRModel.FK_Registro_Materia" FromRole="Registro_Alumno_Materia" ToRole="Materia" />
+        </EntityType>
+        <EntityType Name="Registro_Profesor_Materia">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Profesor" Type="Int32" />
+          <Property Name="Id_Materia" Type="Int32" />
+          <NavigationProperty Name="Materia" Relationship="SincoABRModel.FK_Registro_Profesor_Materia_Materia" FromRole="Registro_Profesor_Materia" ToRole="Materia" />
+          <NavigationProperty Name="Profesor" Relationship="SincoABRModel.FK_Registro_Profesor_Materia_Profesor" FromRole="Registro_Profesor_Materia" ToRole="Profesor" />
+        </EntityType>
+        <Association Name="FK_Registro_Alumno">
+          <End Type="SincoABRModel.Alumno" Role="Alumno" Multiplicity="0..1" />
+          <End Type="SincoABRModel.Registro_Alumno_Materia" Role="Registro_Alumno_Materia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Alumno">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registro_Alumno_Materia">
+              <PropertyRef Name="Id_Alumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Det_Registro_Alumno_Materia_Registro_Alumno_Materia">
+          <End Type="SincoABRModel.Registro_Alumno_Materia" Role="Registro_Alumno_Materia" Multiplicity="0..1" />
+          <End Type="SincoABRModel.Det_Registro_Alumno_Materia" Role="Det_Registro_Alumno_Materia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Registro_Alumno_Materia">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Det_Registro_Alumno_Materia">
+              <PropertyRef Name="Id_Re_Alumno_Materia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registro_Materia">
+          <End Type="SincoABRModel.Materia" Role="Materia" Multiplicity="1" />
+          <End Type="SincoABRModel.Registro_Alumno_Materia" Role="Registro_Alumno_Materia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materia">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registro_Alumno_Materia">
+              <PropertyRef Name="Id_Materia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registro_Profesor_Materia_Materia">
+          <End Type="SincoABRModel.Materia" Role="Materia" Multiplicity="0..1" />
+          <End Type="SincoABRModel.Registro_Profesor_Materia" Role="Registro_Profesor_Materia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Materia">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registro_Profesor_Materia">
+              <PropertyRef Name="Id_Materia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Registro_Profesor_Materia_Profesor">
+          <End Type="SincoABRModel.Profesor" Role="Profesor" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="SincoABRModel.Registro_Profesor_Materia" Role="Registro_Profesor_Materia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profesor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Registro_Profesor_Materia">
+              <PropertyRef Name="Id_Profesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="SPREPORTEALUMNO">
+          <Property Type="Int32" Name="ID_REGISTRO" Nullable="false" />
+          <Property Type="String" Name="ALUMNO" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="MATERIA" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="NOTA" Nullable="true" Precision="38" Scale="6" />
+          <Property Type="String" Name="PROFESOR" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SincoABRModelStoreContainer" CdmEntityContainer="SincoABREntities">
+          <EntitySetMapping Name="Alumno">
+            <EntityTypeMapping TypeName="SincoABRModel.Alumno">
+              <MappingFragment StoreEntitySet="Alumno">
+                <ScalarProperty Name="Carrera" ColumnName="Carrera" />
+                <ScalarProperty Name="Semestre" ColumnName="Semestre" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Det_Registro_Alumno_Materia">
+            <EntityTypeMapping TypeName="SincoABRModel.Det_Registro_Alumno_Materia">
+              <MappingFragment StoreEntitySet="Det_Registro_Alumno_Materia">
+                <ScalarProperty Name="Id_Re_Alumno_Materia" ColumnName="Id_Re_Alumno_Materia" />
+                <ScalarProperty Name="Nota" ColumnName="Nota" />
+                <ScalarProperty Name="Periodo" ColumnName="Periodo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Materia">
+            <EntityTypeMapping TypeName="SincoABRModel.Materia">
+              <MappingFragment StoreEntitySet="Materia">
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Profesor">
+            <EntityTypeMapping TypeName="SincoABRModel.Profesor">
+              <MappingFragment StoreEntitySet="Profesor">
+                <ScalarProperty Name="Profesion" ColumnName="Profesion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Registro_Alumno_Materia">
+            <EntityTypeMapping TypeName="SincoABRModel.Registro_Alumno_Materia">
+              <MappingFragment StoreEntitySet="Registro_Alumno_Materia">
+                <ScalarProperty Name="Id_Alumno" ColumnName="Id_Alumno" />
+                <ScalarProperty Name="Id_Materia" ColumnName="Id_Materia" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Registro_Profesor_Materia">
+            <EntityTypeMapping TypeName="SincoABRModel.Registro_Profesor_Materia">
+              <MappingFragment StoreEntitySet="Registro_Profesor_Materia">
+                <ScalarProperty Name="Id_Materia" ColumnName="Id_Materia" />
+                <ScalarProperty Name="Id_Profesor" ColumnName="Id_Profesor" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
