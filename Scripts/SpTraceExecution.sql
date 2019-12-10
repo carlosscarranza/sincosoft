@@ -1,64 +1,75 @@
-﻿USE [SINCOABR]
-GO
+﻿use [sincoabr]
+go
 
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-IF EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'SPTRACEEXECUTION') 
-	DROP PROCEDURE [DBO].[SPTRACEEXECUTION]  
-GO 
+set ansi_nulls on
+go
+set quoted_identifier on
+go
+if exists (select * from sys.objects where type = 'p' and name = 'sptraceexecution') 
+	drop procedure [dbo].[sptraceexecution]  
+go 
 
-CREATE PROCEDURE [DBO].[SPTRACEEXECUTION] 
-AS
-BEGIN
-DECLARE @DBNAME    NVARCHAR(256),
-        @PROCNAME  NVARCHAR(256)
-SELECT @DBNAME = 'SINCOABR',  
-       @PROCNAME = '[DBO].[SPGETNUMBERSPRIME]' 
+create procedure [dbo].[sptraceexecution] 
+@dbname    nvarchar(256),
+@procname  nvarchar(256)
+as
+begin
+if (isnull(@dbname, '') = '') or (isnull(@dbname, 0) = 0)
+begin
+    raiserror('parametro invalido: @dbname no puede ser null o cero', 18, 0)
+    return
+end
 
-; WITH BASEDATA AS (
-   SELECT QS.STATEMENT_START_OFFSET/2    AS STMT_START,
-          QS.STATEMENT_END_OFFSET/2      AS STMT_END,
-          EST.ENCRYPTED                  AS ISENCRYPTED, 
-		  EST.TEXT                       AS SQLTEXT,
-          EPA.VALUE                      AS SET_OPTIONS, 
-		  QP.QUERY_PLAN                  AS QUERY_PLAN,    
-	      QS.LAST_EXECUTION_TIME         AS LAST_EXECUTION_TIME,
-		  EST.OBJECTID                   AS OBJECTID,
-          CHARINDEX('<PARAMETERLIST>', QP.QUERY_PLAN) + LEN('<PARAMETERLIST>') AS PARAMSTART,
-          CHARINDEX('</PARAMETERLIST>', QP.QUERY_PLAN) AS PARAMEND
-   FROM   SYS.DM_EXEC_QUERY_STATS QS
-   CROSS  APPLY SYS.DM_EXEC_SQL_TEXT(QS.SQL_HANDLE) EST
-   CROSS  APPLY SYS.DM_EXEC_TEXT_QUERY_PLAN(QS.PLAN_HANDLE,
-                                            QS.STATEMENT_START_OFFSET,
-                                            QS.STATEMENT_END_OFFSET) QP
-   CROSS  APPLY SYS.DM_EXEC_PLAN_ATTRIBUTES(QS.PLAN_HANDLE) EPA
-   WHERE  EST.OBJECTID  = OBJECT_ID (@PROCNAME)
-     AND  EST.DBID      = DB_ID(@DBNAME)
-     AND  EPA.ATTRIBUTE = 'SET_OPTIONS'
-), NEXT_LEVEL AS (
-   SELECT STMT_START, SET_OPTIONS, QUERY_PLAN, LAST_EXECUTION_TIME, OBJECTID,
-          CASE WHEN ISENCRYPTED = 1 THEN '-- ENCRYPTED'
-               WHEN STMT_START >= 0
-               THEN SUBSTRING(SQLTEXT, STMT_START + 1,
-                              CASE STMT_END
-                                   WHEN 0 THEN DATALENGTH(SQLTEXT)
-                                   ELSE STMT_END - STMT_START + 1
-                              END)
-          END AS STATEMENT,
-          CASE WHEN PARAMEND > PARAMSTART
-               THEN CAST (SUBSTRING(QUERY_PLAN, PARAMSTART,
-                                   PARAMEND - PARAMSTART) AS XML)
-          END AS PARAMS
-   FROM   BASEDATA
+if (isnull(@procname, '') = '') or (isnull(@procname, 0) = 0)
+begin
+    raiserror('parametro invalido: @procname no puede ser null o cero', 18, 0)
+    return
+end
+
+; with basedata as (
+   select qs.statement_start_offset/2    as stmt_start,
+          qs.statement_end_offset/2      as stmt_end,
+          est.encrypted                  as isencrypted, 
+		  est.text                       as sqltext,
+          epa.value                      as set_options, 
+		  qp.query_plan                  as query_plan,    
+	      qs.last_execution_time         as last_execution_time,
+		  est.objectid                   as objectid,
+          charindex('<parameterlist>', qp.query_plan) + len('<parameterlist>') as paramstart,
+          charindex('</parameterlist>', qp.query_plan) as paramend
+   from   sys.dm_exec_query_stats qs
+   cross  apply sys.dm_exec_sql_text(qs.sql_handle) est
+   cross  apply sys.dm_exec_text_query_plan(qs.plan_handle,
+                                            qs.statement_start_offset,
+                                            qs.statement_end_offset) qp
+   cross  apply sys.dm_exec_plan_attributes(qs.plan_handle) epa
+   where  est.objectid  = object_id (@procname)
+     and  est.dbid      = db_id(@dbname)
+     and  epa.attribute = 'set_options'
+), next_level as (
+   select stmt_start, set_options, query_plan, last_execution_time, objectid,
+          case when isencrypted = 1 then '-- encrypted'
+               when stmt_start >= 0
+               then substring(sqltext, stmt_start + 1,
+                              case stmt_end
+                                   when 0 then datalength(sqltext)
+                                   else stmt_end - stmt_start + 1
+                              end)
+          end as statement,
+          case when paramend > paramstart
+               then cast (substring(query_plan, paramstart,
+                                   paramend - paramstart) as xml)
+          end as params
+   from   basedata
 )
-SELECT N.OBJECTID AS ID,
-	   CR.C.value('@COLUMN', 'NVARCHAR(128)') AS PARAMETRO,
-       CR.C.value('@PARAMETERCOMPILEDVALUE', 'NVARCHAR(128)') AS VALOR,
-	   N.LAST_EXECUTION_TIME AS FECHA_DE_TRANSACCIÓN
-FROM   NEXT_LEVEL N
-CROSS  APPLY   N.PARAMS.nodes('COLUMNREFERENCE') AS CR(C)
-ORDER  BY PARAMETRO DESC
+select n.objectid as id,
+	   cr.c.value('@column', 'nvarchar(128)') as parametro,
+       cr.c.value('@parametercompiledvalue', 'nvarchar(128)') as valor,
+	   n.last_execution_time as fecha_de_transacción
+from   next_level n
+cross  apply   n.params.nodes('columnreference') as cr(c)
+order  by parametro desc
 
-END
+end
+
+
