@@ -243,11 +243,11 @@ Backup*/
 UpgradeLog*.XML
 UpgradeLog*.htm
 ServiceFabricBackup/
-*.rptproj.bak
+# *.rptproj.bak
 
 # SQL Server files
-*.mdf
-*.ldf
+# *.mdf
+# *.ldf
 *.ndf
 
 # Business Intelligence projects
