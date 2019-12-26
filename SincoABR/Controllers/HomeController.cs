@@ -23,6 +23,7 @@ namespace Sinco.Services.Controllers
 
         #region Registro Profesor Materia
 
+        [HttpPost]
         public int CreateRecordTeacherSubject(Registro_Profesor_Materia registro)
         {
             return _registroProfesorMateriaApp.Create(registro);
@@ -32,6 +33,7 @@ namespace Sinco.Services.Controllers
 
         #region Alumno
 
+        [HttpPost]
         public int CreateStudent(Alumno alumno)
         {
             return _alumnoApp.Create(alumno);
@@ -43,12 +45,14 @@ namespace Sinco.Services.Controllers
             return _alumnoApp.Update(alumno);
         }
 
+        [HttpGet]
         public IEnumerable<SPREPORTEALUMNO> GetReportStudent(int id)
         {
             IEnumerable<SPREPORTEALUMNO> resp = _alumnoApp.GetReport(id);
             return resp;
         }
 
+        [HttpGet]
         public IEnumerable<DtoAlumno> GetAllStudent()
         {
             try
@@ -64,6 +68,7 @@ namespace Sinco.Services.Controllers
             return null;
         }
 
+        [HttpGet]
         public DtoAlumno GetStudent(int id)
         {
             Alumno resp = _alumnoApp.GetStudent(id);
@@ -74,17 +79,19 @@ namespace Sinco.Services.Controllers
 
         #region Profesor
 
+        [HttpPost]
         public int CreateTeacher(Profesor profesor)
         {
             return _profesorApp.Create(profesor);
         }
 
-        [HttpGet]
+        [HttpDelete]
         public int DeleteTeacher(int id)
         {
             return _profesorApp.Delete(id);
         }
 
+        [HttpGet]
         public IEnumerable<DtoProfesor> GetTeachers()
         {
             try
@@ -104,11 +111,13 @@ namespace Sinco.Services.Controllers
 
         #region Materia
 
+        [HttpPost]
         public int CreateSubject(Materia materia)
         {
             return _materiaApp.Create(materia);
         }
 
+        [HttpGet]
         public IEnumerable<DtoMateria> GetSubjects()
         {
             try
@@ -129,16 +138,19 @@ namespace Sinco.Services.Controllers
 
         #region Registro Alumno Materia
 
+        [HttpPost]
         public int CreateRecordStudentSubject(Registro_Alumno_Materia registro)
         {
             return _registroAlumnoMateriaApp.Create(registro);
         }
 
+        [HttpPut]
         public int UpdateRecordStudentSubject(Registro_Alumno_Materia registro)
         {
             return _registroAlumnoMateriaApp.Update(registro);
         }
 
+        [HttpGet]
         public IEnumerable<DtoMateria> GetAllSubjectsRegistered()
         {
             try

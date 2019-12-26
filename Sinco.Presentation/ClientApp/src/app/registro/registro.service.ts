@@ -1,6 +1,7 @@
-import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+
 import { IRegistro } from './registro';
 import { IAlumno } from '../alumno/alumno';
 import { IProfesor } from "../profesor/profesor";
@@ -38,7 +39,7 @@ export class RegistroService {
     constructor(private http: HttpClient) { }
 
     updateAlumno(alumno: IAlumno): Observable<number> {
-        return this.http.put<number>(this.apiUrlUpdateStudent, alumno);
+        return this.http.put<number>(this.apiUrlUpdateStudent, alumno); 
     }
 
     updateDetalleRegistro(detRegistro: IDetalleRegistro): Observable<number> {
@@ -95,6 +96,6 @@ export class RegistroService {
     }
 
     deleteProfesor(id: number): Observable<number> {
-        return this.http.get<number>(this.apiUrlDeleteTeacher + "/" + id[0]);
+        return this.http.delete<number>(this.apiUrlDeleteTeacher + "/" + id[0]);
     }
 }

@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{A081
 		Scripts\SpTraceExecution.sql = Scripts\SpTraceExecution.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{E05AED5E-919D-45F4-A889-ECBF2B4DF2EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{F96E8729-1EE6-4489-A45A-06622A894A4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F96E8729-1EE6-4489-A45A-06622A894A4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F96E8729-1EE6-4489-A45A-06622A894A4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E05AED5E-919D-45F4-A889-ECBF2B4DF2EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E05AED5E-919D-45F4-A889-ECBF2B4DF2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E05AED5E-919D-45F4-A889-ECBF2B4DF2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E05AED5E-919D-45F4-A889-ECBF2B4DF2EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +81,7 @@ Global
 		{ECC24EF7-EA58-47EE-BFDE-04919E1925A5} = {ED3C9833-4FAD-4ABF-AF15-6B6A9EA0560C}
 		{F96E8729-1EE6-4489-A45A-06622A894A4F} = {F8E3221D-A8CB-457D-A2B3-22B626017808}
 		{A081ABDA-E20A-4B59-898C-B3CDCE59E7BE} = {C15DD711-ED23-440E-9222-282A56CDE985}
+		{E05AED5E-919D-45F4-A889-ECBF2B4DF2EF} = {F8E3221D-A8CB-457D-A2B3-22B626017808}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9E7CB642-C635-4351-BE14-45BF5052F79C}

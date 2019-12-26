@@ -44,7 +44,7 @@ import { MatDialogModule } from "@angular/material/dialog";
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-      MatDialogModule,
+    MatDialogModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
       { path: "", component: HomeComponent, pathMatch: "full" },
